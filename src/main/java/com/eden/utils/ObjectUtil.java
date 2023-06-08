@@ -1,48 +1,59 @@
 package com.eden.utils;
 
 
-public class ObjectUtil {
-  private ObjectUtil() {}
+import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
-  /**
-   * <p>
-   * 해당 값이 null, 공백문자("")이면 true 값을 반환한다.
-   * </P>
-   *
-   * <pre>
-   * StringUtil.isEmpty(null)    = true
-   * StringUtil.isEmpty("")      = true
-   * StringUtil.isEmpty("   ")   = false
-   * StringUtil.isEmpty("str")   = false
-   * StringUtil.isEmpty(" str ") = false
-   * </pre>
-   *
-   * @param obj (문자형, 숫자형 객체)
-   * @return boolean (체크결과)
-   */
-  public static boolean isEmpty(Object obj) {
-    return obj == null || String.valueOf(obj).length() == 0;
+public class ObjectUtil {
+
+  private ObjectUtil() {
   }
 
   /**
    * <p>
-   * 해당 값이 null, 공백문자(""), whitespace(" ")이면 true 값을 반환한다.
+   * 해당 값이 null, 공백문자, length=0이면 true 값을 반환한다.
    * </p>
    *
    * <pre>
-   * StringUtil.isBlank(null)    = true
-   * StringUtil.isBlank("")      = true
-   * StringUtil.isBlank("   ")   = true
-   * StringUtil.isBlank("str")   = false
-   * StringUtil.isBlank(" str ") = false
+   * isEmpty(null)    = true
+   * isEmpty("")      = true
+   * isEmpty("   ")   = false
+   * isEmpty("str")   = false
+   * isEmpty(" str ") = false
    * </pre>
    *
-   * @param obj (문자형, 숫자형 객체)
+   * @param o 객체
    * @return boolean (체크결과)
    */
-  public static boolean isBlank(Object obj) {
-    String str = (obj == null) ? "" : String.valueOf(obj).trim();
-    return str.length() == 0;
+  public static boolean isEmpty(Object o) {
+    if (o == null) {
+      return true;
+    } else if (o instanceof Optional) {
+      return ((Optional<?>) o).isEmpty();
+    } else if (o instanceof String string) {
+      return string.length() == 0;
+    } else if (o.getClass().isArray()) {
+      return Array.getLength(o) == 0;
+    } else if (o instanceof Collection) {
+      return ((Collection<?>) o).isEmpty();
+    } else if (o instanceof Map) {
+      return ((Map<?, ?>) o).isEmpty();
+    }
+    return false;
+  }
+
+  /**
+   * <p>
+   * 해당 값이 빈값(null, 공백, length=0)이 아니면 true 값을 반환한다.
+   * </p>
+   *
+   * @param o 객체
+   * @return boolean (체크결과)
+   */
+  public static boolean isNotEmpty(Object o) {
+    return !isEmpty(o);
   }
 
   /**
@@ -51,18 +62,18 @@ public class ObjectUtil {
    * </p>
    *
    * <pre>
-   * ObjectUtil.replaceNull(null, null)      = null
-   * ObjectUtil.replaceNull(null, "")        = ""
-   * ObjectUtil.replaceNull(null, "zz")      = "zz"
-   * ObjectUtil.replaceNull("abc", *)        = "abc"
-   * ObjectUtil.replaceNull(Boolean.TRUE, *) = Boolean.TRUE
+   * replaceNull(null, null)      = null
+   * replaceNull(null, "")        = ""
+   * replaceNull(null, "zz")      = "zz"
+   * replaceNull("abc", *)        = "abc"
+   * replaceNull(Boolean.TRUE, *) = Boolean.TRUE
    * </pre>
    *
-   * @param obj (적용될 객체)
-   * @param newObj (새로운 객체)
+   * @param o    (적용될 객체)
+   * @param newO (새로운 객체)
    * @return Object (적용후 객체)
    */
-  public static Object replaceNull(Object obj, Object newObj) {
-    return (obj != null) ? obj : newObj;
+  public static Object replaceNull(Object o, Object newO) {
+    return (o != null) ? o : newO;
   }
 }
