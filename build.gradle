@@ -1,18 +1,44 @@
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'maven-publish'
 }
 
 group = 'com.eden'
 version = '0.0.1'
-sourceCompatibility = '17'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.github.chayoung-choi'
+            artifactId = 'java-core'
+            version = '0.0.1'
+
+            from components.java
+        }
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
+ext {
+    lombokVersion = '1.18.28'
+}
+
 dependencies {
+    implementation 'org.springframework:spring-core:6.0.9'
+
+    implementation 'org.slf4j:slf4j-api:2.0.7'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'org.assertj:assertj-core:3.24.2'
+    testImplementation 'org.slf4j:slf4j-simple:2.0.7'
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
 }
 
 test {
