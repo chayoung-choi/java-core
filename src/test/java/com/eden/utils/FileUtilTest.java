@@ -13,41 +13,47 @@ import java.util.List;
 
 class FileUtilTest {
 
-    private static final String PATH_TEST_FILE = "temp/history.txt";
+  private static final String PATH_TEST_DIR = "temp";
+  private static final String PATH_TEST_FILE = PATH_TEST_DIR + "/history.txt";
 
-    @Test
-    void createFileAsFileOutputStream() throws IOException {
-        Path filePath = Paths.get(PATH_TEST_FILE);
-        Files.deleteIfExists(filePath);
-        File file = new File(PATH_TEST_FILE);
+  @Test
+  void name() throws IOException {
+    Files.createDirectory(Path.of(PATH_TEST_DIR));
+  }
 
-        FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-        Assertions.assertThat(Files.exists(filePath)).isTrue();
-    }
+  @Test
+  void createFileAsFileOutputStream() throws IOException {
+    Path filePath = Paths.get(PATH_TEST_FILE);
+    Files.deleteIfExists(filePath);
+    File file = new File(PATH_TEST_FILE);
 
-    @Test
-    void createFileAsFiles() throws IOException {
-        Path filePath = Paths.get(PATH_TEST_FILE);
-        Files.deleteIfExists(filePath);
+    FileOutputStream fileOutputStream = new FileOutputStream(file, true);
+    Assertions.assertThat(Files.exists(filePath)).isTrue();
+  }
 
-        Path newFilePath = Files.createFile(filePath);
-        System.out.println(newFilePath);
-        Assertions.assertThat(Files.exists(filePath)).isTrue();
-    }
+  @Test
+  void createFileAsFiles() throws IOException {
+    Path filePath = Paths.get(PATH_TEST_FILE);
+    Files.deleteIfExists(filePath);
 
-    @Test
-    void writeFile() throws IOException {
-        Path filePath = Paths.get(PATH_TEST_FILE);
-        String message = String.format("\n안녕하세요. %s", DateUtil.getNow());
-        Files.write(filePath, message.getBytes());
-        Assertions.assertThat(Files.exists(filePath)).isTrue();
-    }
+    Path newFilePath = Files.createFile(filePath);
+    System.out.println(newFilePath);
+    Assertions.assertThat(Files.exists(filePath)).isTrue();
+  }
 
-    @Test
-    void readFile() throws IOException {
-        Path filePath = Paths.get(PATH_TEST_FILE);
-        List<String> lines = Files.readAllLines(filePath);
-        System.out.println(lines);
-        Assertions.assertThat(Files.exists(filePath)).isTrue();
-    }
+  @Test
+  void writeFile() throws IOException {
+    Path filePath = Paths.get(PATH_TEST_FILE);
+    String message = String.format("\n안녕하세요. %s", DateUtil.getNow());
+    Files.write(filePath, message.getBytes());
+    Assertions.assertThat(Files.exists(filePath)).isTrue();
+  }
+
+  @Test
+  void readFile() throws IOException {
+    Path filePath = Paths.get(PATH_TEST_FILE);
+    List<String> lines = Files.readAllLines(filePath);
+    System.out.println(lines);
+    Assertions.assertThat(Files.exists(filePath)).isTrue();
+  }
 }
