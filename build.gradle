@@ -5,13 +5,14 @@ plugins {
 
 group = 'com.eden'
 version = '0.0.1'
+sourceCompatibility = '17'
 
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'com.github.chayoung-choi'
-            artifactId = 'java-core'
-            version = '0.0.1'
+            groupId = 'com.github.chayoung-choi' as Publication
+            artifactId = 'java-core' as Publication
+            version = '0.0.1' as Publication
 
             from components.java
         }
