@@ -1,6 +1,7 @@
 package com.eden.utils;
 
-import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -20,6 +21,17 @@ class FileUtilTest {
 
     Path filePath = Paths.get(PATH_TEST_FILE);
 
+    @BeforeAll
+    static void setupAll() throws IOException {
+        Path dirPath = Path.of(PATH_TEST_DIR);
+        Files.createDirectories(dirPath);
+    }
+
+    @BeforeEach
+    void setup() throws IOException {
+        Files.deleteIfExists(filePath);
+    }
+
     @Test
     void createDirectories() throws IOException {
         Path dirPath = Path.of(PATH_TEST_DIR);
@@ -29,7 +41,6 @@ class FileUtilTest {
 
     @Test
     void createFileAsFileOutputStream() throws IOException {
-        Files.deleteIfExists(filePath);
         File file = new File(PATH_TEST_FILE);
 
         try (FileOutputStream fos = new FileOutputStream(file, true)) {
@@ -40,8 +51,6 @@ class FileUtilTest {
 
     @Test
     void createFileAsFiles() throws IOException {
-        Files.deleteIfExists(filePath);
-
         Path newFilePath = Files.createFile(filePath);
         System.out.println(newFilePath);
         assertThat(Files.exists(filePath)).isTrue();
@@ -49,21 +58,30 @@ class FileUtilTest {
 
     @Test
     void writeFile() throws IOException {
-        String message = String.format("\n안녕하세요. %s", DateUtil.getNow());
+        String message = String.format("안녕하세요. %s\n", DateUtil.getNow());
         Files.write(filePath, message.getBytes());
         assertThat(Files.exists(filePath)).isTrue();
     }
 
     @Test
     void readFile() throws IOException {
+        String message = String.format("안녕하세요. %s\n", DateUtil.getNow());
+        Files.write(filePath, message.getBytes());
+
         List<String> lines = Files.readAllLines(filePath);
         System.out.println(lines);
         assertThat(Files.exists(filePath)).isTrue();
     }
 
-    @RepeatedTest(5)
+    @Test
     void appendFile() throws IOException {
-        String message = String.format("\n안녕하세요. %s", DateUtil.getNow());
-        FileUtil.writeFile(filePath.toString(), message);
+        String message = String.format("안녕하세요. %s\n", DateUtil.getNow());
+
+        for (int i = 0; i < 5; i++) {
+            FileUtil.writeFile(filePath.toString(), message, true);
+        }
+
+        List<String> lines = Files.readAllLines(filePath);
+        assertThat(lines).hasSize(5);
     }
 }
