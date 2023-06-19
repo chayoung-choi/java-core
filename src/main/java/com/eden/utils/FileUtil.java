@@ -9,7 +9,15 @@ public class FileUtil {
     private FileUtil() {
     }
 
+    public static void writeFile(String filePath, String contents, boolean isAppend) throws IOException {
+        if (isAppend) {
+            Files.write(Paths.get(filePath), contents.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        } else {
+            writeFile(filePath, contents);
+        }
+    }
+
     public static void writeFile(String filePath, String contents) throws IOException {
-        Files.write(Paths.get(filePath), contents.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        Files.write(Paths.get(filePath), contents.getBytes(), StandardOpenOption.CREATE);
     }
 }
