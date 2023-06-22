@@ -1,6 +1,8 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.eden'
@@ -29,7 +31,7 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework:spring-core:6.0.9'
+    implementation 'org.springframework.boot:spring-boot-starter'
 
     implementation 'org.slf4j:slf4j-api:2.0.7'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
